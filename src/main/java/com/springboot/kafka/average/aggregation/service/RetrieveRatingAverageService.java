@@ -1,8 +1,7 @@
 package com.springboot.kafka.average.aggregation.service;
 
 import com.springboot.kafka.average.aggregation.config.Constants;
-import com.springboot.kafka.average.aggregation.model.CountAndSum;
-import lombok.RequiredArgsConstructor;
+import com.springboot.kafka.average.aggregation.model.CountSumAverage;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StoreQueryParameters;
@@ -28,19 +27,19 @@ public class RetrieveRatingAverageService {
     public RetrieveRatingAverageService(StreamsBuilderFactoryBean streamsBuilderFactoryBean) {
         this.streamsBuilderFactoryBean = streamsBuilderFactoryBean;
     }
-    public CountAndSum getStoreCountAndSum(Long movieId) {
+    public CountSumAverage getStoreCountAndSum(Long movieId) {
         return initializeStore().get(movieId);
     }
-    public List<KeyValue<Long,CountAndSum>> getAllKeyValueStores() {
-        List<KeyValue<Long,CountAndSum>> list = new ArrayList<>();
-        ReadOnlyKeyValueStore <Long, CountAndSum> keyValueStores = this.initializeStore();
-        KeyValueIterator<Long,CountAndSum> keyValueIterator = keyValueStores.all();
+    public List<KeyValue<Long, CountSumAverage>> getAllKeyValueStores() {
+        List<KeyValue<Long, CountSumAverage>> list = new ArrayList<>();
+        ReadOnlyKeyValueStore <Long, CountSumAverage> keyValueStores = this.initializeStore();
+        KeyValueIterator<Long, CountSumAverage> keyValueIterator = keyValueStores.all();
         while (keyValueIterator.hasNext()) {
             list.add(keyValueIterator.next());
         }
         return list;
     }
-    private ReadOnlyKeyValueStore<Long,CountAndSum> initializeStore() {
+    private ReadOnlyKeyValueStore<Long, CountSumAverage> initializeStore() {
         KafkaStreams kafkaStreams = streamsBuilderFactoryBean.getKafkaStreams();
         return kafkaStreams.store(
                 StoreQueryParameters.fromNameAndType(

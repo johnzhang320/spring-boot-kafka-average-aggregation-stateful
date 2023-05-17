@@ -6,13 +6,13 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @Builder
-public class CountAndSum {
+public class CountSumAverage {
     private Long movieId;
     private Long count;
     private Double sum;
     private Double average;
     private String movieName;
-    public CountAndSum() {
+    public CountSumAverage() {
         this.count=0L;
         this.sum=0.0;
         this.average=0.0;
