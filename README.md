@@ -239,5 +239,12 @@
          }
      }
   
-   
-
+## Spring boot Kafka Topics, KStream, Producer and Consumer Configuration   
+  We use Spring @Bean / @DependsOn annotatioh and KafkaAdmin / TopicBuilder to create kafka topics before all other @Bean start to run
+  This operation gaurantees creates topics regardless of which kafka running environment is , OS , docker container or Kuberetes and second
+  benefit avoid tedious manually create topics using kafka-topic command.
+  
+  Configuring the consumer, we use DefaultKafkaConsumerFactory, when we explicitely provide our JsonDeserializer by object type to ensure 
+  deserialize json under our control, this is why we use the code configurator instead of using application.properties or application.yml because
+  it seems to only suppert standard apache kafka Json Deserializer which is not object typed.
+  
