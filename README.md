@@ -10,11 +10,16 @@
 9. Using Confluent 6.0 images run single broker for demo
 
 ## My Kafka Related Links
- spring-boot kafka json stream/
 
- Spring-boot kafka event driven/
-
- Spring-boot kafka stream sorted unique word count/ 
+  [spring-boot kafka json stream/](https://johnzhang320.com/spring-boot-kafka-json-stream)
+  
+  [Spring boot connects to AWS EC2 Kafka docker container/](https://johnzhang320.com/kafka-aws-ec2-kafka-docker/)
+  
+  [Spring-boot kafka event driven/](https://johnzhang320.com/spring-boot-kafka-event-driven)
+ 
+  [Spring-boot kafka stream sorted unique word count/](https://johnzhang320.com/sorted-unique-word-count/)
+  
+  
 
 ## Work flow chart
 
