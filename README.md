@@ -200,7 +200,44 @@
   
   CountSumAverageSerdes.serdes()  ----- CountSumAverage serdes
   
-  
+### MovieRatingSerdes implementation
+
+   import com.springboot.kafka.average.aggregation.model.MovieRating;
+   import com.springboot.kafka.average.aggregation.serdes.JsonDeserializer;
+   import com.springboot.kafka.average.aggregation.serdes.JsonSerializer;
+   import org.apache.kafka.common.serialization.Serde;
+   import org.apache.kafka.common.serialization.Serdes;
+
+   public class MovieRatingSerdes extends Serdes.WrapperSerde<MovieRating> {
+       public MovieRatingSerdes() {
+           super (new JsonSerializer<>(),new JsonDeserializer<>(MovieRating.class));
+       }
+       public static Serde<MovieRating> serdes() {
+           JsonSerializer<MovieRating> serializer = new JsonSerializer<>();
+           JsonDeserializer<MovieRating> deSerializer = new JsonDeserializer<>(MovieRating.class);
+           return Serdes.serdeFrom(serializer, deSerializer);
+       }
+   }
+ 
+ 
+ ### CountAndSumSerdes implementation 
+ 
+     import com.springboot.kafka.average.aggregation.model.CountSumAverage;
+     import com.springboot.kafka.average.aggregation.serdes.JsonDeserializer;
+     import com.springboot.kafka.average.aggregation.serdes.JsonSerializer;
+     import org.apache.kafka.common.serialization.Serde;
+     import org.apache.kafka.common.serialization.Serdes;
+
+     public class CountAndSumSerdes extends Serdes.WrapperSerde<CountSumAverage> {
+         public CountAndSumSerdes() {
+             super (new JsonSerializer<>(),new JsonDeserializer<>(CountSumAverage.class));
+         }
+         public static Serde<CountSumAverage> serdes() {
+             JsonSerializer<CountSumAverage> serializer = new JsonSerializer<>();
+             JsonDeserializer<CountSumAverage> deSerializer = new JsonDeserializer<>(CountSumAverage.class);
+             return Serdes.serdeFrom(serializer, deSerializer);
+         }
+     }
   
    
 
