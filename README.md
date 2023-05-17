@@ -9,6 +9,8 @@
 8. Created Tumbling Time Window to verify our Generic JsonMapper and find properties setting related if time window works
 9. Using Confluent 6.0 images run single broker for demo
 
+## My Kafka Related Links
+  
 ## Work flow chart
 
 <img src="images/work-flow.png" width="90%" height="90%">
