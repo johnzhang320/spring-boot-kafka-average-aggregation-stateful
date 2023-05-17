@@ -360,9 +360,12 @@
      }
  
  ## KStream Processor
-   In confluent commity, this is similar to Topology code, difference this is loaded as default singleton instance by Spring @Bean and 
+   In confluent community, this is similar to Topology code, difference this is loaded as default singleton instance by Spring @Bean and 
    @EnableKafkaStream annotations. Because We configure KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME, so we should
    follow using "kstream" as processor name
+   
+   We created two processor , first one has no time window, second one has tumbling time window , we put time window to another article , here
+   introduce no time window one. but this repository already provide time window code.
    
    Let's see the topologic flow chart for average aggregation:
    
