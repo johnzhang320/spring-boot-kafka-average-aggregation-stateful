@@ -13,6 +13,7 @@ import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.EnableKafkaStreams;
@@ -28,7 +29,7 @@ import static org.apache.kafka.streams.kstream.Grouped.with;
 @EnableKafkaStreams
 @Slf4j
 public class AverageTimeWindowProcessor {
-    //@Bean
+    @Bean
     public KStream<Long, CountSumAverage> kStream(StreamsBuilder streamsBuilder) {
         KStream<Long, MovieRating> moveRatingStream = streamsBuilder.stream(Constants.INPUT_RATING_TOPIC,
                 Consumed.with(Serdes.Long(), MovieRatingSerdes.serdes())
@@ -59,7 +60,7 @@ public class AverageTimeWindowProcessor {
 
 
 
-        Duration tumblingSize = Duration.ofSeconds(10L);
+        Duration tumblingSize = Duration.ofSeconds(20L);
         TimeWindows tumblingWindowSize = TimeWindows.of(tumblingSize);
 
             ratingCountAndSum.toStream()

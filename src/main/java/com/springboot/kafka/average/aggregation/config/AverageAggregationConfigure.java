@@ -29,7 +29,7 @@ import java.util.Map;
 @EnableKafkaStreams
 @EnableKafka
 @Configuration
-public class AverageConfigure {
+public class AverageAggregationConfigure {
     @Bean(name=Constants.BOOTSTRAP_ADMIN)
     public KafkaAdmin admin() {
         Map<String, Object> configs = new HashMap<>();

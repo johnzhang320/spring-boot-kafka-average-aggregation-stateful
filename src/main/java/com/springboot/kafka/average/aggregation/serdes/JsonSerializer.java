@@ -2,15 +2,11 @@ package com.springboot.kafka.average.aggregation.serdes;
 
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
 public class JsonSerializer<T> implements Serializer<T> {
-
     public JsonSerializer() {
     }
-
     @Override
     public void configure(Map<String, ?> props, boolean isKey) {
     }

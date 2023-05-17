@@ -26,7 +26,7 @@ import static org.apache.kafka.common.serialization.Serdes.Long;
 @Slf4j
 public class AverageProcessor {
 
-    @Bean
+   //@Bean
     public KStream<Long, CountSumAverage> kStream(StreamsBuilder streamsBuilder) {
         KStream<Long, MovieRating> moveRatingStream = streamsBuilder.stream(Constants.INPUT_RATING_TOPIC,
                 Consumed.with(Long(), MovieRatingSerdes.serdes())
