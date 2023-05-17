@@ -358,4 +358,17 @@
                      new com.springboot.kafka.average.aggregation.serdes.JsonDeserializer<MovieRating>(MovieRating.class));
          }
      }
-  
+ 
+ ## KStream Processor
+   In confluent commity, this is similar to Topology code, difference this is loaded as default singleton instance by Spring @Bean and 
+   @EnableKafkaStream annotations. Because We configure KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME, so we should
+   follow using "kstream" as processor name
+   
+   Let's see the topologic flow chart for average aggregation:
+   
+   
+   
+   
+   
+   
+ 
