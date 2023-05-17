@@ -1,4 +1,4 @@
-# spring-boot-kafka-json-statful-average-aggregation
+# spring-boot kafka json stateful average aggregation
 ## Key Points
 1. Customized Json Serializer and Deserialize as bottom level, MovieRating and CountAndSum Json Serdes as Implementation layer, such that supports  complex model objects. 
 2. Using Spring boot configure the Kafka Stream, Json Objcet Consumer and Producer, using defaultKafkaStreamsConfig for KStream processor (Similiar to Confluent's Topology), using Spring boot KafkaAdmin and TopicBuilder to create topic use @DependsOn to depend on previous @Bean to gaurantee creating topic before processor running. Therefore no more need docker-compose.yml or manually creating topics
