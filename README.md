@@ -1,1 +1,1 @@
-# spring-boot-kafka-average-aggregation-stateful
+# spring-boot-kafka-json-statful-average-aggregation
