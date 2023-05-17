@@ -10,7 +10,12 @@
 9. Using Confluent 6.0 images run single broker for demo
 
 ## My Kafka Related Links
-  
+ spring-boot kafka json stream/
+
+ Spring-boot kafka event driven/
+
+ Spring-boot kafka stream sorted unique word count/ 
+
 ## Work flow chart
 
 <img src="images/work-flow.png" width="90%" height="90%">
