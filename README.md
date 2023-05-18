@@ -557,8 +557,8 @@
  ## Final Result from stateful keyvalue store 
  
  ### Uniquely save data to keyvalue store by Id without intermediate data
-     This is amazing, Materialize View save the data by Key, which suppress all intermediate data, get data uniquely by id
-     Here we simulated four movies, then keyvalue store only save four records, super suppressed (to unique by id)
+   This is amazing, Materialize View save the data by Key, which suppress all intermediate data, get data uniquely by id
+   Here we simulated four movies, then keyvalue store only save four records, super suppressed (to unique by id)
      
    <img src="images/get-all-average-ration-from-keyvalue-store.png" width="80%" height="80%">
      
