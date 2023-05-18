@@ -443,7 +443,9 @@
       }
    
 ## Create Test code to simulate movie rating events 
-
+   Use KafkaTemplate send movie rating
+   Using Math.random to dynamically create rating number and rating for dynamic movies
+   In order test the time window suppress, sorted or not sorted movie
 
       @Service
       @RequiredArgsConstructor
@@ -452,12 +454,10 @@
           public static String movies[]={"Top Gun II","Gladiator","London Has Fallen","Blood Diamond","Troy"};
           public  List<MovieRating> createRandomMovieRation() {
               List<MovieRating> list = new ArrayList<>();
-
               for (Long i=0L; i<100L; i++) {
                   Double r;
                   r = 3+Math.random() * 7.0;
                   int l = (int) (Math.random() * 4.0);
-
                   Long id = Long.valueOf(l);
                   MovieRating movieRating = new MovieRating(id,r,movies[l],new Date());
                   list.add(movieRating);
@@ -491,4 +491,63 @@
               return list;
           }
       }
+ 
+ ## Create ReadOnlyKeyValueStore service and iterator all of them to array list, Restful API call it
+ 
+      import com.springboot.kafka.average.aggregation.config.Constants;
+      import com.springboot.kafka.average.aggregation.model.CountSumAverage;
+      import org.apache.kafka.streams.KafkaStreams;
+      import org.apache.kafka.streams.KeyValue;
+      import org.apache.kafka.streams.StoreQueryParameters;
+      import org.apache.kafka.streams.state.KeyValueIterator;
+      import org.apache.kafka.streams.state.QueryableStoreTypes;
+      import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
+      import org.springframework.beans.factory.annotation.Autowired;
+      import org.springframework.kafka.annotation.EnableKafka;
+      import org.springframework.kafka.annotation.EnableKafkaStreams;
+      import org.springframework.kafka.config.StreamsBuilderFactoryBean;
+      import org.springframework.stereotype.Service;
+
+      import java.util.ArrayList;
+      import java.util.List;
+
+      @Service
+      @EnableKafka
+      @EnableKafkaStreams
+      public class RetrieveRatingAverageService {
+
+          private StreamsBuilderFactoryBean streamsBuilderFactoryBean;
+          @Autowired
+          public RetrieveRatingAverageService(StreamsBuilderFactoryBean streamsBuilderFactoryBean) {
+              this.streamsBuilderFactoryBean = streamsBuilderFactoryBean;
+          }
+          public CountSumAverage getStoreCountAndSum(Long movieId) {
+              return initializeStore().get(movieId);
+          }
+          public List<KeyValue<Long, CountSumAverage>> getAllKeyValueStores() {
+              List<KeyValue<Long, CountSumAverage>> list = new ArrayList<>();
+              ReadOnlyKeyValueStore <Long, CountSumAverage> keyValueStores = this.initializeStore();
+              KeyValueIterator<Long, CountSumAverage> keyValueIterator = keyValueStores.all();
+              while (keyValueIterator.hasNext()) {
+                  list.add(keyValueIterator.next());
+              }
+              return list;
+          }
+          private ReadOnlyKeyValueStore<Long, CountSumAverage> initializeStore() {
+              KafkaStreams kafkaStreams = streamsBuilderFactoryBean.getKafkaStreams();
+              return kafkaStreams.store(
+                      StoreQueryParameters.fromNameAndType(
+                              Constants.MOVIE_STORE,
+                              QueryableStoreTypes.keyValueStore()
+                      )
+              );
+          }
+      }
+      
+ ## Test Result
+ ### Sorted Progress Result
+ 
+ ### Not Sorted Progress Result
+ ### Final Result from stateful keyvalue store 
+ (unique by movieId, in the progress , call the URL to see data change dynamically, Much better than using time window suppress)
  
