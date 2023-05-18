@@ -567,5 +567,10 @@
    http://localhost:8098/movie/getAllAverageRating link while stream is in progress processing, the data in store 
    immediately change!
   
-   <img src="images/observe-keyvalue-store-data-change-in-progress.png" width="70%" height="70%">
+   <img src="images/observe-keyvalue-store-data-change-in-progress.png" width="90%" height="90%">
+   
+# Conclusion
+  Our Json Serializer and Json Deserializer to be easily implement topology by all in one aggregation. stateful Aggregation
+  make sense to accumulate our statistic result and can be dynamically updated by materialize view, which is super suppressed data(unique by key)
+  
    
