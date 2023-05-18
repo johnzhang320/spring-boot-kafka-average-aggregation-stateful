@@ -548,11 +548,11 @@
  
  ### Sorted Progress Result
  
-     <img src="images/sorted-id-count-sum-average-in-progress.png" width="70%" height="70%">
+   <img src="images/sorted-id-count-sum-average-in-progress.png" width="70%" height="70%">
      
  ### Not Sorted Progress Result
  
-     <img src="images/generate-movie-rating-not-sorted.png" width="70%" height="70%">
+   <img src="images/generate-movie-rating-not-sorted.png" width="70%" height="70%">
      
  ## Final Result from stateful keyvalue store 
  
@@ -560,7 +560,7 @@
      This is amazing, Materialize View save the data by Key, which suppress all intermediate data, get data uniquely by id
      Here we simulated four movies, then keyvalue store only save four records, super suppressed (to unique by id)
      
-     <img src="images/get-all-average-ration-from-keyvalue-store.png" width="80%" height="80%">
+   <img src="images/get-all-average-ration-from-keyvalue-store.png" width="80%" height="80%">
      
 ### Update store data in store dynamically
    Materialize View is saving new aggregated data to store dynamically, real time update, I delibrately reload  
