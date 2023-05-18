@@ -545,11 +545,27 @@
       }
       
  ## Test Result
- ### Sorted Progress Result
- <img src="images/sorted-id-count-sum-average-in-progress.png" width="90%" height="90%">
- ### Not Sorted Progress Result
- <img src="images/generate-movie-rating-not-sorted.png" width="90%" height="90%">
- ### Final Result from stateful keyvalue store 
- (unique by movieId, in the progress , call the URL to see data change dynamically, Much better than using time window suppress)
- <img src="get-all-average-ration-from-keyvalue-store.png" width="90%" height="90%">
  
+ ### Sorted Progress Result
+ 
+     <img src="images/sorted-id-count-sum-average-in-progress.png" width="70%" height="70%">
+     
+ ### Not Sorted Progress Result
+ 
+     <img src="images/generate-movie-rating-not-sorted.png" width="70%" height="70%">
+     
+ ## Final Result from stateful keyvalue store 
+ 
+ ### Uniquely save data to keyvalue store by Id without intermediate data
+     This is amazing, Materialize View save the data by Key, which suppress all intermediate data, get data uniquely by id
+     Here we simulated four movies, then keyvalue store only save four records, super suppressed (to unique by id)
+     
+     <img src="images/get-all-average-ration-from-keyvalue-store.png" width="80%" height="80%">
+     
+### Update store data in store dynamically
+   Materialize View is saving new aggregated data to store dynamically, real time update, I delibrately reload  
+   http://localhost:8098/movie/getAllAverageRating link while stream is in progress processing, the data in store 
+   immediately change!
+  
+   <img src="images/observe-keyvalue-store-data-change-in-progress.png" width="70%" height="70%">
+   
