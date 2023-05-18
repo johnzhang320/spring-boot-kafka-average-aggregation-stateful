@@ -7,18 +7,15 @@ import com.springboot.kafka.average.aggregation.serdeImpl.CountSumAverageSerdes;
 import com.springboot.kafka.average.aggregation.serdeImpl.MovieRatingSerdes;
 import com.springboot.kafka.average.aggregation.service.GenerateMovieRating;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.*;
-import org.apache.kafka.streams.processor.TopicNameExtractor;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.EnableKafkaStreams;
-
 import static org.apache.kafka.streams.kstream.Grouped.with;
 import static org.apache.kafka.common.serialization.Serdes.Double;
 import static org.apache.kafka.common.serialization.Serdes.Long;
@@ -53,7 +50,8 @@ public class AverageProcessor {
                                 .withValueSerde(CountSumAverageSerdes.serdes()));
 
         KStream<Long, CountSumAverage> retResult=ratingCountAndSum.toStream()
-                .peek((key,value)->log.info("Average Movie Rating Id {}, Average Rating: {}, Movie Name {}",key,value.getAverage(),value.getMovieName()));
+                .peek((key,value)->log.info("Average Movie Rating Id {}, Average Rating: {}, Movie Name {}",
+                        key,value.getAverage(),value.getMovieName()));
 
         return retResult;
 
