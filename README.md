@@ -384,63 +384,111 @@
   <img src="images/topology-flow-chart.png" width="50%" height="50%">
    
    
-              import com.springboot.kafka.average.aggregation.config.Constants;
-              import com.springboot.kafka.average.aggregation.model.CountSumAverage;
-              import com.springboot.kafka.average.aggregation.model.MovieRating;
-              import com.springboot.kafka.average.aggregation.serdeImpl.CountSumAverageSerdes;
-              import com.springboot.kafka.average.aggregation.serdeImpl.MovieRatingSerdes;
-              import com.springboot.kafka.average.aggregation.service.GenerateMovieRating;
-              import lombok.extern.slf4j.Slf4j;
-              import org.apache.kafka.common.utils.Bytes;
-              import org.apache.kafka.streams.KeyValue;
-              import org.apache.kafka.streams.StreamsBuilder;
-              import org.apache.kafka.streams.kstream.*;
-              import org.apache.kafka.streams.state.KeyValueStore;
-              import org.springframework.context.annotation.Bean;
-              import org.springframework.context.annotation.Configuration;
-              import org.springframework.kafka.annotation.EnableKafka;
-              import org.springframework.kafka.annotation.EnableKafkaStreams;
-              import static org.apache.kafka.streams.kstream.Grouped.with;
-              import static org.apache.kafka.common.serialization.Serdes.Double;
-              import static org.apache.kafka.common.serialization.Serdes.Long;
-              @Configuration
-              @EnableKafka
-              @EnableKafkaStreams
-              @Slf4j
-              public class AverageProcessor {
+      import com.springboot.kafka.average.aggregation.config.Constants;
+      import com.springboot.kafka.average.aggregation.model.CountSumAverage;
+      import com.springboot.kafka.average.aggregation.model.MovieRating;
+      import com.springboot.kafka.average.aggregation.serdeImpl.CountSumAverageSerdes;
+      import com.springboot.kafka.average.aggregation.serdeImpl.MovieRatingSerdes;
+      import com.springboot.kafka.average.aggregation.service.GenerateMovieRating;
+      import lombok.extern.slf4j.Slf4j;
+      import org.apache.kafka.common.utils.Bytes;
+      import org.apache.kafka.streams.KeyValue;
+      import org.apache.kafka.streams.StreamsBuilder;
+      import org.apache.kafka.streams.kstream.*;
+      import org.apache.kafka.streams.state.KeyValueStore;
+      import org.springframework.context.annotation.Bean;
+      import org.springframework.context.annotation.Configuration;
+      import org.springframework.kafka.annotation.EnableKafka;
+      import org.springframework.kafka.annotation.EnableKafkaStreams;
+      import static org.apache.kafka.streams.kstream.Grouped.with;
+      import static org.apache.kafka.common.serialization.Serdes.Double;
+      import static org.apache.kafka.common.serialization.Serdes.Long;
+      @Configuration
+      @EnableKafka
+      @EnableKafkaStreams
+      @Slf4j
+      public class AverageProcessor {
 
-                  @Bean
-                  public KStream<Long, CountSumAverage> kStream(StreamsBuilder streamsBuilder) {
-                      KStream<Long, MovieRating> moveRatingStream = streamsBuilder.stream(Constants.INPUT_RATING_TOPIC,
-                              Consumed.with(Long(), MovieRatingSerdes.serdes())
-                                      .withTimestampExtractor(new MovieTimeExtractor()));
+          @Bean
+          public KStream<Long, CountSumAverage> kStream(StreamsBuilder streamsBuilder) {
+              KStream<Long, MovieRating> moveRatingStream = streamsBuilder.stream(Constants.INPUT_RATING_TOPIC,
+                      Consumed.with(Long(), MovieRatingSerdes.serdes())
+                              .withTimestampExtractor(new MovieTimeExtractor()));
 
-                      KGroupedStream<Long, Double> ratingsById = moveRatingStream
-                              .map((key, rating) -> new KeyValue<>(rating.getMovieId(), rating.getRating()))
-                              .groupByKey(with(Long(), Double()));
+              KGroupedStream<Long, Double> ratingsById = moveRatingStream
+                      .map((key, rating) -> new KeyValue<>(rating.getMovieId(), rating.getRating()))
+                      .groupByKey(with(Long(), Double()));
 
-                      final KTable<Long, CountSumAverage> ratingCountAndSum =
-                              ratingsById.aggregate(() -> new CountSumAverage(),  // initial when create instance
-                                      (key, value, aggregate) -> {
-                                          aggregate.setMovieId(key);
-                                          aggregate.setCount(aggregate.getCount() + 1);
-                                          aggregate.setSum(aggregate.getSum() + value);
-                                          aggregate.setAverage(aggregate.getCount()>0 ? aggregate.getSum()/aggregate.getCount():0);
-                                          aggregate.setMovieName(GenerateMovieRating.movies[Integer.valueOf(Math.toIntExact(key))]);
-                                          return aggregate;
-                                      },
-                                      Materialized.<Long, CountSumAverage, KeyValueStore<Bytes,byte[]>>as(Constants.MOVIE_STORE)
-                                              .withKeySerde(Long())
-                                              .withValueSerde(CountSumAverageSerdes.serdes()));
+              final KTable<Long, CountSumAverage> ratingCountAndSum =
+                      ratingsById.aggregate(() -> new CountSumAverage(),  // initial when create instance
+                              (key, value, aggregate) -> {
+                                  aggregate.setMovieId(key);
+                                  aggregate.setCount(aggregate.getCount() + 1);
+                                  aggregate.setSum(aggregate.getSum() + value);
+                                  aggregate.setAverage(aggregate.getCount()>0 ? aggregate.getSum()/aggregate.getCount():0);
+                                  aggregate.setMovieName(GenerateMovieRating.movies[Integer.valueOf(Math.toIntExact(key))]);
+                                  return aggregate;
+                              },
+                              Materialized.<Long, CountSumAverage, KeyValueStore<Bytes,byte[]>>as(Constants.MOVIE_STORE)
+                                      .withKeySerde(Long())
+                                      .withValueSerde(CountSumAverageSerdes.serdes()));
 
-                      KStream<Long, CountSumAverage> retResult=ratingCountAndSum.toStream()
-                              .peek((key,value)->log.info("Average Movie Rating Id {}, Average Rating: {}, Movie Name {}",
-                                      key,value.getAverage(),value.getMovieName()));
+              KStream<Long, CountSumAverage> retResult=ratingCountAndSum.toStream()
+                      .peek((key,value)->log.info("Average Movie Rating Id {}, Average Rating: {}, Movie Name {}",
+                              key,value.getAverage(),value.getMovieName()));
 
-                      return retResult;
+              return retResult;
 
-                  }
+          }
+      }
+   
+## Create Test code to simulate movie rating events 
+
+
+      @Service
+      @RequiredArgsConstructor
+      public class GenerateMovieRating {
+          private  final KafkaTemplate<Long, MovieRating> kafkaTemplate;
+          public static String movies[]={"Top Gun II","Gladiator","London Has Fallen","Blood Diamond","Troy"};
+          public  List<MovieRating> createRandomMovieRation() {
+              List<MovieRating> list = new ArrayList<>();
+
+              for (Long i=0L; i<100L; i++) {
+                  Double r;
+                  r = 3+Math.random() * 7.0;
+                  int l = (int) (Math.random() * 4.0);
+
+                  Long id = Long.valueOf(l);
+                  MovieRating movieRating = new MovieRating(id,r,movies[l],new Date());
+                  list.add(movieRating);
               }
-   
-   
+              return list;
+          }
+
+          public List<MovieRating> sendByRandomDurationSorted () {
+              List<MovieRating> list =createRandomMovieRation();
+              list.sort((o1,o2)->o1.getMovieId().compareTo(o2.getMovieId()));
+              list.forEach(movieRating->{
+                  int l = (int) (Math.random() * 1000.0);  // millis seconds
+                  try {
+                      Thread.sleep(l);
+                  } catch (InterruptedException s) {}
+                  kafkaTemplate.send(Constants.INPUT_RATING_TOPIC,movieRating.getMovieId(),movieRating);
+              });
+              return list;
+          }
+
+          public List<MovieRating> sendByRandomDuration () {
+              List<MovieRating> list =createRandomMovieRation();
+
+              list.forEach(movieRating->{
+                  int l = (int) (Math.random() * 1000.0);  // millis seconds
+                  try {
+                      Thread.sleep(l);
+                  } catch (InterruptedException s) {}
+                  kafkaTemplate.send(Constants.INPUT_RATING_TOPIC,movieRating.getMovieId(),movieRating);
+              });
+              return list;
+          }
+      }
  
