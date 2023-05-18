@@ -6,8 +6,8 @@ import com.springboot.kafka.average.aggregation.serdes.JsonSerializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 
-public class CountAndSumSerdes extends Serdes.WrapperSerde<CountSumAverage> {
-    public CountAndSumSerdes() {
+public class CountSumAverageSerdes extends Serdes.WrapperSerde<CountSumAverage> {
+    public CountSumAverageSerdes() {
         super (new JsonSerializer<>(),new JsonDeserializer<>(CountSumAverage.class));
     }
     public static Serde<CountSumAverage> serdes() {

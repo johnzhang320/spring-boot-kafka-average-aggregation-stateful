@@ -3,7 +3,7 @@ package com.springboot.kafka.average.aggregation.processor;
 import com.springboot.kafka.average.aggregation.config.Constants;
 import com.springboot.kafka.average.aggregation.model.CountSumAverage;
 import com.springboot.kafka.average.aggregation.model.MovieRating;
-import com.springboot.kafka.average.aggregation.serdeImpl.CountAndSumSerdes;
+import com.springboot.kafka.average.aggregation.serdeImpl.CountSumAverageSerdes;
 import com.springboot.kafka.average.aggregation.serdeImpl.MovieRatingSerdes;
 import com.springboot.kafka.average.aggregation.service.GenerateMovieRating;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import static org.apache.kafka.streams.kstream.Grouped.with;
 @EnableKafkaStreams
 @Slf4j
 public class AverageTimeWindowProcessor {
-    @Bean
+   // @Bean
     public KStream<Long, CountSumAverage> kStream(StreamsBuilder streamsBuilder) {
         KStream<Long, MovieRating> moveRatingStream = streamsBuilder.stream(Constants.INPUT_RATING_TOPIC,
                 Consumed.with(Serdes.Long(), MovieRatingSerdes.serdes())
@@ -51,7 +51,7 @@ public class AverageTimeWindowProcessor {
                         },
                         Materialized.<Long, CountSumAverage, KeyValueStore<Bytes,byte[]>>as(Constants.MOVIE_STORE)
                                 .withKeySerde(Serdes.Long())
-                                .withValueSerde(CountAndSumSerdes.serdes()));
+                                .withValueSerde(CountSumAverageSerdes.serdes()));
 
              KStream<Long, CountSumAverage> retResult=ratingCountAndSum.toStream()
                     .peek((key,value)->log.info("Average Movie Rating Id {}, Average Rating: {}, Movie Name {}",key,value.getAverage(),value.getMovieName()));
@@ -64,7 +64,7 @@ public class AverageTimeWindowProcessor {
         TimeWindows tumblingWindowSize = TimeWindows.of(tumblingSize);
 
             ratingCountAndSum.toStream()
-                .groupByKey(with(Long(), CountAndSumSerdes.serdes()))
+                .groupByKey(with(Long(), CountSumAverageSerdes.serdes()))
                 .windowedBy(tumblingWindowSize)
                 .count()
                 .suppress(Suppressed.untilWindowCloses(Suppressed.BufferConfig.unbounded()))
