@@ -546,8 +546,10 @@
       
  ## Test Result
  ### Sorted Progress Result
- 
+ <img src="images/sorted-id-count-sum-average-in-progress.png" width="90%" height="90%">
  ### Not Sorted Progress Result
+ <img src="images/generate-movie-rating-not-sorted.png" width="90%" height="90%">
  ### Final Result from stateful keyvalue store 
  (unique by movieId, in the progress , call the URL to see data change dynamically, Much better than using time window suppress)
+ <img src="get-all-average-ration-from-keyvalue-store.png" width="90%" height="90%">
  
