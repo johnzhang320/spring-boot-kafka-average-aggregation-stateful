@@ -11,6 +11,10 @@
 
 ## My Kafka Related Links
 
+
+  
+  [spring-boot kafka json stream/](https://johnzhang320.com/spring-boot-kafka-json-stream)
+  
   [spring-boot kafka json stream/](https://johnzhang320.com/spring-boot-kafka-json-stream)
   
   [Spring boot connects to AWS EC2 Kafka docker container/](https://johnzhang320.com/kafka-aws-ec2-kafka-docker/)
