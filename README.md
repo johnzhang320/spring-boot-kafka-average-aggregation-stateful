@@ -10,8 +10,6 @@
 9. Using Confluent 6.0 images run single broker for demo
 
 ## My Kafka Related Links
-
-
   
   [spring-boot kafka json stream/](https://johnzhang320.com/spring-boot-kafka-json-stream)
   
