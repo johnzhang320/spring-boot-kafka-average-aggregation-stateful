@@ -206,7 +206,7 @@
 
 ## Json Serdes Implementation of Objects
   Generic Json Serializer and Json Deserializer create an Abstract layer to serialize / deserialize, Object Serdes provide type of those generic
-  class to implement this Abstract layer, then create implementation layer, this json layer architecture to be able to simplify and standize the 
+  class to implement this Abstract layer, then create implementation layer, this json layer architecture to be able to simplify the 
   Kstream processor (topology), which benefits team development.
   The Serdes Usage for typical objects in kstream processor will be like after implementing objects serdes:
   
